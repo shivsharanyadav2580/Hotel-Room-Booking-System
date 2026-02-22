@@ -1,34 +1,12 @@
-const fs = require("fs");
-const path = require("path");
+const mongoose = require("mongoose");
 
-const rootDir = require("./../util/path-util");
-const { error } = require("console");
-const registeredHomes = [];
+const homeSchema = new mongoose.Schema({
+  houseName: { type: String, required: true },
+  price: { type: Number, required: true },
+  location: { type: String, required: true },
+  rating: { type: Number, default: 5 },
+  photoUrl: { type: String, default: "" },
+  host: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
 
-module.exports = class Home {
-  constructor(houseName,price,location , rating , photourl ) {
-    this.houseName = houseName;
-    this.price = price;
-    this.location = location;
-    this.rating = rating;
-    this.photourl = photourl
-  }
-  save() {
-    registeredHomes.push(this);
-    const homeFilePath = path.join(rootDir, "data", "homes.json");
-    fs.writeFile(homeFilePath, JSON.stringify(registeredHomes), (error) => {
-      if (error) {
-        console.error("Failed to write to homes.json:", error);
-        throw error; // Optionally re-throw the error
-      } else {
-        console.log("Home saved successfully.");
-      }
-    });
-  }
-  
-    static fetchAll() {
-    return registeredHomes;
-  }
-};
-
-exports.registeredHomes = registeredHomes;
+module.exports = mongoose.model("Home", homeSchema);

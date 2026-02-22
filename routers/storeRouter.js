@@ -1,12 +1,14 @@
-const path = require("path");
 const express = require("express");
-const storeController = require("./../controllers/storeController")
+const storeController = require('./../controllers/storeController')
+const storeRouter = express.Router();
 
-const rootDir = require("../util/path-util");
+storeRouter.get("/", storeController.getIndex);
+storeRouter.get("/homes", storeController.getHomes);
+storeRouter.get("/homes/:homeId", storeController.getHomeDetails);
+storeRouter.get("/favourites", storeController.getFavourites);
+storeRouter.post("/favourites", storeController.postAddFavourites);
+storeRouter.post("/favourites/delete/:homeId", storeController.postRemoveFavourite);
+storeRouter.get("/about", storeController.getAbout);
+storeRouter.get("/contact", storeController.getContact);
 
-
-const storeRouter = express.Router(); // Corrected this line
-
-storeRouter.get("/", storeController.getHome );
-
-module.exports = storeRouter; // Ensure this is exporting the correct router
+module.exports = storeRouter;
